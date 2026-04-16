@@ -1,0 +1,36 @@
+name: Build Project
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Backend
+    - name: Setup Java
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+
+    - name: Build Backend
+      run: |
+        cd spring-boot/spring-boot
+        mvn clean package -DskipTests
+
+    # Frontend
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Build Frontend
+      run: |
+        cd aviation-frontend
+        npm install
+        npm run build
